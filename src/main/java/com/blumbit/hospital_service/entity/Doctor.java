@@ -1,6 +1,6 @@
 package com.blumbit.hospital_service.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "doctor", schema = "administracion")

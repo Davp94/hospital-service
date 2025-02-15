@@ -1,7 +1,7 @@
 package com.blumbit.hospital_service.entity;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Table(name = "reservacion", schema = "administracion")
@@ -15,7 +15,7 @@ public class Reservacion {
     private Short resEstado;
 
     @Column(name = "res_fecha_reserva")
-    private LocalDateTime resFechaReserva;
+    private Instant resFechaReserva;
 
     @ManyToOne
     @JoinColumn(name = "paciente_id", referencedColumnName = "pac_id")

@@ -1,7 +1,11 @@
 package com.blumbit.hospital_service.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "especialidad", schema = "administracion")
 public class Especialidad {
