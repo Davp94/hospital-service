@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blumbit.hospital_service.dto.request.EspecialidadRequest;
+import com.blumbit.hospital_service.dto.response.EspecialidadResponse;
 import com.blumbit.hospital_service.entity.Especialidad;
 import com.blumbit.hospital_service.service.EspecialidadService;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,27 +27,27 @@ public class EspecialidadController {
     }
 
     @GetMapping
-    public List<Especialidad> findAllEspecialidad(){
+    public List<EspecialidadResponse> findAllEspecialidad(){
         return especialidadService.findAllEspecialidades();
     }
 
     // http://localhost:9700/especialidad?id=1232 -- query param @RequestParam
     // http://localhost:9700/especialidad/1232   --- path variable @PathVariable
     @GetMapping("/{id}")
-    public Especialidad findEspecialidadById(@PathVariable Short id){
+    public EspecialidadResponse findEspecialidadById(@PathVariable Short id){
         return especialidadService.findEspecialidadById(id);
     }
 
     @PostMapping
-    public Especialidad createEspecialidad(@RequestBody Especialidad especialidad) {
+    public EspecialidadResponse createEspecialidad(@RequestBody EspecialidadRequest especialidad) {
         return especialidadService.createEspecialidad(especialidad);
     }
     
 
     @PutMapping("/{id}")
-    public Especialidad putMethodName(@PathVariable Short id, @RequestBody Especialidad especialidad) {
+    public EspecialidadResponse putMethodName(@PathVariable Short id, @RequestBody EspecialidadRequest especialidad) {
         
-        return especialidadService.updateEspecialidad(especialidad);
+        return especialidadService.updateEspecialidad(id, especialidad);
     }
 
     @DeleteMapping("/{id}")
