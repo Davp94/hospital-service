@@ -12,6 +12,8 @@ import com.blumbit.hospital_service.dto.response.EspecialidadResponse;
 import com.blumbit.hospital_service.entity.Especialidad;
 import com.blumbit.hospital_service.repository.EspecialidadRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class EspecialidadServiceImpl implements EspecialidadService{
 
@@ -39,7 +41,7 @@ public class EspecialidadServiceImpl implements EspecialidadService{
 
     @Override
     public EspecialidadResponse findEspecialidadById(Short id) {
-        Especialidad especialidadFinded = especialidadRepository.findById(id).orElseThrow(()-> new RuntimeException("No se encuentra la especliadidad con el id solicitado"));
+        Especialidad especialidadFinded = especialidadRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("No se encuentra la especliadidad con el id solicitado"));
         return EspecialidadResponse.fromEntity(especialidadFinded);
     }
 
@@ -52,7 +54,7 @@ public class EspecialidadServiceImpl implements EspecialidadService{
 
     @Override
     public EspecialidadResponse updateEspecialidad(Short id, EspecialidadRequest especialidad) {
-        EspecialidadResponse especialidadFinded = findEspecialidadById(id);
+        Especialidad especialidadFinded = especialidadRepository.findById(id).orElseThrow(()-> new RuntimeException("No se encuentra la especliadidad con el id solicitado"));
         especialidadFinded.setEspDescripcion(especialidad.getEspDescripcion());
         especialidadFinded.setEspNombre(especialidad.getEspNombre());
         return EspecialidadResponse.fromEntity(especialidadRepository.save(especialidadFinded));

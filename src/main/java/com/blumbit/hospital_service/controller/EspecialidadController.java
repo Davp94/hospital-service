@@ -12,6 +12,9 @@ import com.blumbit.hospital_service.dto.request.EspecialidadRequest;
 import com.blumbit.hospital_service.dto.response.EspecialidadResponse;
 import com.blumbit.hospital_service.entity.Especialidad;
 import com.blumbit.hospital_service.service.EspecialidadService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,13 +42,13 @@ public class EspecialidadController {
     }
 
     @PostMapping
-    public EspecialidadResponse createEspecialidad(@RequestBody EspecialidadRequest especialidad) {
+    public EspecialidadResponse createEspecialidad(@RequestBody @Valid EspecialidadRequest especialidad) {
         return especialidadService.createEspecialidad(especialidad);
     }
     
 
     @PutMapping("/{id}")
-    public EspecialidadResponse putMethodName(@PathVariable Short id, @RequestBody EspecialidadRequest especialidad) {
+    public EspecialidadResponse putMethodName(@PathVariable Short id, @RequestBody @Valid EspecialidadRequest especialidad) {
         
         return especialidadService.updateEspecialidad(id, especialidad);
     }
