@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.blumbit.hospital_service.common.MessageService;
 import com.blumbit.hospital_service.dto.request.EspecialidadRequest;
 import com.blumbit.hospital_service.dto.response.EspecialidadResponse;
 import com.blumbit.hospital_service.entity.Especialidad;
@@ -19,8 +20,12 @@ public class EspecialidadServiceImpl implements EspecialidadService{
 
     private final EspecialidadRepository especialidadRepository;
 
-    public EspecialidadServiceImpl(EspecialidadRepository especialidadRepository) {
+    private final MessageService messageService;
+
+    
+    public EspecialidadServiceImpl(EspecialidadRepository especialidadRepository, MessageService messageService) {
         this.especialidadRepository = especialidadRepository;
+        this.messageService = messageService;
     }
 
     @Override
@@ -41,7 +46,7 @@ public class EspecialidadServiceImpl implements EspecialidadService{
 
     @Override
     public EspecialidadResponse findEspecialidadById(Short id) {
-        Especialidad especialidadFinded = especialidadRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("No se encuentra la especliadidad con el id solicitado"));
+        Especialidad especialidadFinded = especialidadRepository.findById(id).orElseThrow(()-> new RuntimeException(messageService.getMessage("especialidad.not.found")));
         return EspecialidadResponse.fromEntity(especialidadFinded);
     }
 
@@ -54,11 +59,10 @@ public class EspecialidadServiceImpl implements EspecialidadService{
 
     @Override
     public EspecialidadResponse updateEspecialidad(Short id, EspecialidadRequest especialidad) {
-        Especialidad especialidadFinded = especialidadRepository.findById(id).orElseThrow(()-> new RuntimeException("No se encuentra la especliadidad con el id solicitado"));
+        Especialidad especialidadFinded = especialidadRepository.findById(id).orElseThrow(()-> new RuntimeException(messageService.getMessage("especialidad.not.found")));
         especialidadFinded.setEspDescripcion(especialidad.getEspDescripcion());
         especialidadFinded.setEspNombre(especialidad.getEspNombre());
         return EspecialidadResponse.fromEntity(especialidadRepository.save(especialidadFinded));
-
     }
 
     @Override

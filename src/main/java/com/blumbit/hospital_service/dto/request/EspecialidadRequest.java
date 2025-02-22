@@ -25,8 +25,8 @@ public class EspecialidadRequest {
     @Length(max = 100)
     private String espNombre;
 
-    @NotEmpty(message = "validation.notempty")
-    @NotNull(message = "validation.notnull")
+    @NotEmpty(message = "{validation.notempty}")
+    @NotNull(message = "{validation.notnull}")
     @Length(max = 200)
     private String espDescripcion;
 
