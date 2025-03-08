@@ -2,6 +2,10 @@ package com.blumbit.hospital_service.util;
 
 import java.io.IOException;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -15,15 +19,34 @@ public class JwtFilter extends OncePerRequestFilter{
 
     private final JwtUtil jwtUtil;
 
-    public JwtFilter(JwtUtil jwtUtil) {
+    private final UserDetailsService userDetailsService;
+
+    public JwtFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'doFilterInternal'");
+        
+        String jwt = null;
+        String username = null;
+
+        String authorizationHeader = request.getHeader("Authorization");
+        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
+            jwt = authorizationHeader.substring(7);
+            username = jwtUtil.getUsernameFromToken(jwt);
+        }
+
+        if(username != null && SecurityContextHolder.getContext().getAuthentication() != null){
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if(jwtUtil.isValidToken(jwt, userDetails)){
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken.setDetails(userDetails);
+            }            
+        }
+        filterChain.doFilter(request, response);
     }
 
 }
