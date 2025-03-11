@@ -1,5 +1,11 @@
 package com.blumbit.hospital_service.service;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 
 import com.blumbit.hospital_service.dto.request.LoginRequest;
@@ -11,14 +17,22 @@ public class LoginService {
 
     private final JwtUtil jwtUtil;
 
-    private final UsuarioSecurityServiceImpl usuarioSecurityServiceImpl;
+    private final AuthenticationManager authenticationManager;
 
-    private final PacienteService pacienteService;
-
-    public LoginResponse returnToken(LoginRequest loginRequest){
-        //validar usuario 
+    public LoginService(JwtUtil jwtUtil,
+            AuthenticationManager authenticationManager) {
+        this.jwtUtil = jwtUtil;
+        this.authenticationManager = authenticationManager;
     }
 
-    //TODO add login validation & return token
+    public LoginResponse returnToken(LoginRequest loginRequest) {
+        UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                loginRequest.getPassword());
+        authenticationManager.authenticate(login);
+        String token = jwtUtil.generateToken(loginRequest.getUsername());
+        return LoginResponse.builder()
+                .token(token)
+                .build();
+    }
 
 }

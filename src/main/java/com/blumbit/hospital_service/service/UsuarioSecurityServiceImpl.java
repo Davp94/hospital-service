@@ -1,30 +1,30 @@
 package com.blumbit.hospital_service.service;
 
-import java.util.Collection;
-
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.blumbit.hospital_service.dto.response.PacienteResponse;
+
 @Service
-public class UsuarioSecurityServiceImpl implements UserDetails{
+public class UsuarioSecurityServiceImpl implements UserDetailsService{
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAuthorities'");
+    private final PacienteService pacienteService;
+
+    public UsuarioSecurityServiceImpl(PacienteService pacienteService) {
+        this.pacienteService = pacienteService;
     }
 
     @Override
-    public String getPassword() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+       PacienteResponse pacienteRetrieved = pacienteService.findPacienteByUsername(username);
+       return User.builder()
+                .username(pacienteRetrieved.getPacUsername())
+                .password(pacienteRetrieved.getPacPassword())
+                .build();
     }
 
-    @Override
-    public String getUsername() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
-    }
 
 }

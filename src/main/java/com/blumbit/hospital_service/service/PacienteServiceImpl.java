@@ -41,7 +41,7 @@ public class PacienteServiceImpl implements PacienteService{
     @Override
     public PacienteResponse findPacienteByUsername(String username) {
         Paciente pacienteRetrieved = pacienteRepository.findByPacUsername(username).orElseThrow(()-> new RuntimeException(messageService.getMessage("usuario.not.found")));
-        return PacienteResponse.fromEntity(pacienteRetrieved);
+        return PacienteResponse.fromEntitySecurity(pacienteRetrieved);
     }
 
     @Override
