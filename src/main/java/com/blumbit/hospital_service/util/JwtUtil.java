@@ -7,13 +7,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
@@ -63,7 +64,7 @@ public class JwtUtil {
         return expirationDate.before(new Date());
     }
 
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(secretkey.getBytes());
+    private SecretKey getSigningKey() {
+        return Jwts.SIG.HS256.key().build();
     }
 }

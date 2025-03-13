@@ -30,6 +30,7 @@ public class LoginService {
                 loginRequest.getPassword());
         authenticationManager.authenticate(login);
         String token = jwtUtil.generateToken(loginRequest.getUsername());
+        String retrieveUser = jwtUtil.getUsernameFromToken(token);
         return LoginResponse.builder()
                 .token(token)
                 .build();
