@@ -10,10 +10,14 @@ import com.blumbit.hospital_service.entity.Horario;
 
 public interface HorarioRepository extends ListCrudRepository<Horario, Integer>{
     
-    @Query(value = "select * from administracion.horario h where EXTRACT(MONTH FROM h.hor_fecha) = ?1 ", nativeQuery = true)
-    List<Horario> findAllByMes(int month);
+    @Query(value = 
+    """
+    select * from administracion.horario h where EXTRACT(MONTH FROM h.hor_fecha) = ?1 
+    AND h.hor_disponible = ?2 AND h.doc_id = ?3 
+    """, nativeQuery = true)
+    List<Horario> findAllByMesDisponibleDoctor(int month,  Boolean disponible, Short id);
 
-    List<Horario> findAllByHorFecha(LocalDateTime horFecha);
+    List<Horario> findAllByHorFechaAndHorDisponibleAndDoctor_DocId(LocalDateTime horFecha, Boolean disponible, Short id);
 
     // @Query(value = "SELECT * FROM horario WHERE EXTRACT(MONTH FROM hor_fecha) = :month", 
     //     nativeQuery = true)
