@@ -2,15 +2,9 @@ package com.blumbit.hospital_service.dto.response;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
-import com.blumbit.hospital_service.entity.Doctor;
-import com.blumbit.hospital_service.entity.Especialidad;
 import com.blumbit.hospital_service.entity.Horario;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -3,7 +3,9 @@ package com.blumbit.hospital_service.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blumbit.hospital_service.dto.request.PageRequestDto;
 import com.blumbit.hospital_service.dto.request.ReservacionRequest;
+import com.blumbit.hospital_service.dto.response.PageResponseDto;
 import com.blumbit.hospital_service.dto.response.ReservacionResponse;
 import com.blumbit.hospital_service.service.ReservacionService;
 
@@ -30,6 +32,12 @@ public class ReservacionController {
     public List<ReservacionResponse> findReservacionesByPaciente(@RequestParam String username) {
         return reservacionService.findReservacionesByPaciente(username);
     }
+
+    @GetMapping("/pagination")
+    public PageResponseDto<ReservacionResponse> findReservacionesPagination(PageRequestDto pageRequestDto) {
+        return reservacionService.findPaginationReservaciones(pageRequestDto);
+    }
+    
 
     @PostMapping
     public ReservacionResponse postMethodName(@RequestBody ReservacionRequest reservacionRequest) {     

@@ -4,14 +4,21 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.blumbit.hospital_service.dto.request.PageRequestDto;
 import com.blumbit.hospital_service.dto.request.ReservacionRequest;
+import com.blumbit.hospital_service.dto.response.PageResponseDto;
 import com.blumbit.hospital_service.dto.response.ReservacionResponse;
 import com.blumbit.hospital_service.entity.Doctor;
 import com.blumbit.hospital_service.entity.Horario;
 import com.blumbit.hospital_service.entity.Paciente;
 import com.blumbit.hospital_service.entity.Reservacion;
+import com.blumbit.hospital_service.repository.ReservacionPageRepository;
 import com.blumbit.hospital_service.repository.ReservacionRepository;
 
 import jakarta.persistence.EntityManager;
@@ -25,9 +32,12 @@ public class ReservacionServiceImpl implements ReservacionService{
 
     private final EntityManager entityManager;
 
-    public ReservacionServiceImpl(ReservacionRepository reservacionRepository, EntityManager entityManager) {
+    private final ReservacionPageRepository reservacionPageRepository;
+
+    public ReservacionServiceImpl(ReservacionRepository reservacionRepository, EntityManager entityManager, ReservacionPageRepository reservacionPageRepository) {
         this.reservacionRepository = reservacionRepository;
         this.entityManager = entityManager;
+        this.reservacionPageRepository = reservacionPageRepository;
     }
 
     @Override
@@ -62,5 +72,26 @@ public class ReservacionServiceImpl implements ReservacionService{
         return true;
     }
 
+    @Override
+    public PageResponseDto<ReservacionResponse> findPaginationReservaciones(PageRequestDto pageRequestDto) {
+        Sort sort = Sort.by(
+                pageRequestDto.getDirection().equalsIgnoreCase("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC,
+                pageRequestDto.getSortBy());
+
+        PageRequest pageable = PageRequest.of(pageRequestDto.getPage(), pageRequestDto.getSize(), sort);
+
+        Page<Reservacion> reservacionPage = reservacionPageRepository.findAll(pageable);
+        List<ReservacionResponse> reservacionResponses = reservacionPage.getContent().stream()
+                .map(ReservacionResponse::fromEntity).collect(Collectors.toList());
+
+        return PageResponseDto.<ReservacionResponse>builder()
+                        .content(reservacionResponses)
+                        .pageNumber(reservacionPage.getNumber())
+                        .pageSize(reservacionPage.getSize())
+                        .totalElementes(reservacionPage.getTotalElements())
+                        .totalPages(reservacionPage.getTotalPages())
+                        .build();
+
+    }
 
 }
