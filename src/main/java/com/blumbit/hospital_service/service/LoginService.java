@@ -19,18 +19,21 @@ public class LoginService {
 
     private final AuthenticationManager authenticationManager;
 
+    private final UserDetailsService userDetailsService;
+
     public LoginService(JwtUtil jwtUtil,
-            AuthenticationManager authenticationManager) {
+            AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
     }
 
     public LoginResponse returnToken(LoginRequest loginRequest) {
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword());
-        authenticationManager.authenticate(login);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
         String token = jwtUtil.generateToken(loginRequest.getUsername());
-        String retrieveUser = jwtUtil.getUsernameFromToken(token);
+        //String retrieveUser = jwtUtil.getUsernameFromToken(token);
         return LoginResponse.builder()
                 .token(token)
                 .build();

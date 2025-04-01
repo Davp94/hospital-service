@@ -19,7 +19,7 @@ public class DoctorServiceImpl implements DoctorService{
 
     @Override
     public List<DoctorResponse> findALlDoctoresByEspecialidad(Short espId) {
-        return doctorRepository.findAllBy_Especialidad_EspId(espId).stream().map(DoctorResponse::fromEntity).collect(Collectors.toList());
+        return doctorRepository.findAllByEspecialidad_EspId(espId).stream().map(DoctorResponse::fromEntity).collect(Collectors.toList());
     }
 
 }

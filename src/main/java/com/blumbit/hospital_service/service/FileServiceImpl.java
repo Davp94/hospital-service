@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -68,7 +69,7 @@ public class FileServiceImpl implements FileService {
 
     private String generateUniqueFilename(String fileName){
         //240425_214622FSDSAD434mi-archivo.pdf UUID
-        String timestamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(Instant.now());
+        String timestamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
         return timestamp + "_" + UUID.randomUUID().toString().substring(0, 8) + "_"
         + fileName;
     }

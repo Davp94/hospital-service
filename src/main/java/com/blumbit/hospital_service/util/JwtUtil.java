@@ -1,5 +1,6 @@
 package com.blumbit.hospital_service.util;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
@@ -49,14 +52,15 @@ public class JwtUtil {
 
     private Claims getAllClaims(String token){
         return Jwts.parser()
+        .verifyWith(getSigningKey())
         .build()
-        .parseEncryptedClaims(token)
+        .parseSignedClaims(token)
         .getPayload();
     }
 
     public boolean isValidToken(String token, UserDetails userDetails) {
         String username = getUsernameFromToken(token);
-        return username.equals(userDetails.getUsername());
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token) {
@@ -65,6 +69,7 @@ public class JwtUtil {
     }
 
     private SecretKey getSigningKey() {
-        return Jwts.SIG.HS256.key().build();
+        byte[] keyBytes = Decoders.BASE64.decode(secretkey);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }

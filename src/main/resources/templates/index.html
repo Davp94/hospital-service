@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <title>Document</title>
+</head>
+<body>
+    <h1>Lista de Reservaciones</h1>
+    <table>
+        <thead>
+            <tr>Doctor</tr>
+            <tr>Especialidad</tr>
+            <tr>Fecha</tr>
+            <tr>Hora Inicio</tr>
+            <tr>Hora Fin</tr>
+        </thead>
+        <tbody>
+            <tr th:each="reservacion: ${reservaciones}">
+                <td th:text="${reservacion.docNombreCompleto}"></td>
+                <td th:text="${reservacion.espNombre}"></td>
+                <td th:text="${reservacion.horarioResponse.horFecha}"></td>
+                <td th:text="${reservacion.horarioResponse.horHoraInicio}"></td>
+                <td th:text="${reservacion.horarioResponse.horHoraFin}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
