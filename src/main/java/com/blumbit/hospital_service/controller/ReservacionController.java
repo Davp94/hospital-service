@@ -33,8 +33,8 @@ public class ReservacionController {
         return reservacionService.findReservacionesByPaciente(username);
     }
 
-    @GetMapping("/pagination")
-    public PageResponseDto<ReservacionResponse> findReservacionesPagination(PageRequestDto pageRequestDto) {
+    @PostMapping("/pagination")
+    public PageResponseDto<ReservacionResponse> findReservacionesPagination(@RequestBody PageRequestDto pageRequestDto) {
         return reservacionService.findPaginationReservaciones(pageRequestDto);
     }
     
