@@ -1,6 +1,9 @@
 package com.blumbit.hospital_service.service;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,13 +39,14 @@ public class HorarioServiceImpl implements HorarioService{
     }
 
     @Override
-    public List<HorarioResponse> findAllByFechaDisponibleDoctor(LocalDateTime horFecha, Boolean disponible,
+    public List<HorarioResponse> findAllByFechaDisponibleDoctor(String horFecha, Boolean disponible,
             Short docId) {
         try {
-            return horarioRepository.findAllByHorFechaAndHorDisponibleAndDoctor_DocId(horFecha, disponible, docId).stream().map(HorarioResponse::fromEntity).collect(Collectors.toList());
+              LocalDate localDate = LocalDate.parse(horFecha); // Parse as LocalDate
+            return horarioRepository.findAllByDateAndDisponibleAndDoctor(localDate, disponible, docId).stream().map(HorarioResponse::fromEntity).collect(Collectors.toList());
         } catch (RuntimeException e) {
             log.debug(e.getMessage(), e);
-            throw new RuntimeException("Error al listar los horarios por fecha");
+            throw new RuntimeException(e);
         }
     }
 

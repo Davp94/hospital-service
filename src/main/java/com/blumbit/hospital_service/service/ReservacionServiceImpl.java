@@ -22,6 +22,7 @@ import com.blumbit.hospital_service.repository.ReservacionPageRepository;
 import com.blumbit.hospital_service.repository.ReservacionRepository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -45,16 +46,22 @@ public class ReservacionServiceImpl implements ReservacionService{
         return reservacionRepository.findAllByPaciente_PacUsername(username).stream().map(ReservacionResponse::fromEntity).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public ReservacionResponse createReservacion(ReservacionRequest reservacionRequest) {
         try {
             if(this.validationsReservacion(reservacionRequest)){
+                Horario horario = entityManager.find(Horario.class, reservacionRequest.getHorId());
+                horario.setHorDisponible(false);
+                entityManager.merge(horario);
+                entityManager.flush();
                 Reservacion reservacion = new Reservacion();
                 reservacion.setDoctor(entityManager.getReference(Doctor.class, reservacionRequest.getDocId()));
                 reservacion.setPaciente(entityManager.getReference(Paciente.class, reservacionRequest.getPacId()));
                 reservacion.setHorario(entityManager.getReference(Horario.class, reservacionRequest.getHorId()));
                 reservacion.setResEstado((short)1);
                 reservacion.setResFechaReserva(Instant.now());
+                reservacion.setResId((int)(reservacionRepository.count()+1));
                 Reservacion reservacionSaved = reservacionRepository.save(reservacion);
                 return ReservacionResponse.fromEntity(reservacionSaved);
             } else {

@@ -9,6 +9,6 @@ public interface HorarioService {
 
     List<HorarioResponse> findAllByMesDisponibleDoctor(int month,  Boolean disponible, Short docId);
 
-    List<HorarioResponse> findAllByFechaDisponibleDoctor(LocalDateTime horFecha,  Boolean disponible, Short docId);
+    List<HorarioResponse> findAllByFechaDisponibleDoctor(String horFecha,  Boolean disponible, Short docId);
 
 }

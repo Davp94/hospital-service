@@ -25,7 +25,7 @@ public class HorarioController {
     }
 
     @GetMapping
-    public List<HorarioResponse> getHorariosByFecha(@RequestParam LocalDateTime horFecha, @RequestParam Boolean disponible, @RequestParam Short docId) {
+    public List<HorarioResponse> getHorariosByFecha(@RequestParam String horFecha, @RequestParam Boolean disponible, @RequestParam Short docId) {
         return horarioService.findAllByFechaDisponibleDoctor(horFecha, disponible, docId);
     }
 

@@ -30,6 +30,7 @@ public class ReservacionResponse {
     return ReservacionResponse.builder()
                     .horarioResponse(HorarioResponse.fromEntity(reservacion.getHorario()))
                     .docNombreCompleto(reservacion.getDoctor().getDocNombre() + " " + reservacion.getDoctor().getDocApellidos())
+                    .espNombre(reservacion.getDoctor().getEspecialidad().getEspNombre())
                     .resEstado(reservacion.getResEstado())
                     .build();
     }

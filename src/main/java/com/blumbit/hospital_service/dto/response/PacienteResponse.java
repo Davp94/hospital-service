@@ -25,6 +25,7 @@ public class PacienteResponse {
     private String pacPassword;
     private Short pacEstado;
     private String pacFoto;
+    private Integer rol;
 
     public static PacienteResponse fromEntity(Paciente paciente) {
         return PacienteResponse.builder()
@@ -34,6 +35,7 @@ public class PacienteResponse {
                 .pacUsername(paciente.getPacUsername())
                 .pacEstado(paciente.getPacEstado())
                 .pacFoto(paciente.getPacFoto())
+                .rol(1)
                 .build();
     }
 
@@ -46,6 +48,7 @@ public class PacienteResponse {
                 .pacEstado(paciente.getPacEstado())
                 .pacPassword(paciente.getPacPassword())
                 .pacFoto(paciente.getPacFoto())
+                .rol(1)
                 .build();
     }
 

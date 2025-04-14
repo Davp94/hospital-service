@@ -19,6 +19,8 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HorarioResponse {
 
+    private Integer id;
+
     private LocalDateTime horFecha;
 
     private LocalTime horHoraInicio;
@@ -32,6 +34,7 @@ public class HorarioResponse {
 
     public static HorarioResponse fromEntity(Horario horario){
         return HorarioResponse.builder()
+                        .id(horario.getHorId())
                         .horFecha(horario.getHorFecha())
                         .horHoraInicio(horario.getHorHoraInicio())
                         .horHoraFin(horario.getHorHoraFin())
